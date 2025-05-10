@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Atendimento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 custom-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Senhas</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Gerar Senha</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-light custom-bg">
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Painel de Guichês -->
+                <div class="col-md-6">
+                    <div class="card shadow p-4">
+                        <h4 class="card-title">Guichês</h4>
+                        <p><strong>Guichê 1:</strong> {{ guiche1 if guiche1 else "Aguardando..." }}</p>
+                        <p><strong>Guichê 2:</strong> {{ guiche2 if guiche2 else "Aguardando..." }}</p>
+                        <a href="{{ url_for('painel') }}" class="btn btn-primary mt-3 custom-btn">Chamar Pacientes</a>
+                    </div>
+                </div>
+
+                <!-- Fila de Espera -->
+                <div class="col-md-6">
+                    <div class="card shadow p-4">
+                        <h4 class="card-title">Fila Atual</h4>
+                        {% if fila_espera %}
+                        <ul class="list-group">
+                            {% for paciente in fila_espera %}
+                            <li class="list-group-item">
+                                {{ paciente.senha }} - {{ paciente.setor }}
+                                {% if paciente.preferencial %}
+                                <span class="badge bg-warning text-dark">Preferencial</span>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted">Nenhum paciente na fila.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

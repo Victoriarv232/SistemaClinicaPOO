@@ -1,0 +1,21 @@
+body {
+    background-color: #e9f0f7;
+
+}
+
+.custom-navbar {
+    background-color: #1c2d50 !important;
+}
+
+.custom-navbar a {
+    color: white;
+}
+
+
+.custom-btn {
+    background-color: #1c2d50;
+}
+
+.custom-bg {
+    background-color: #e9f0f7 !important;
+}
