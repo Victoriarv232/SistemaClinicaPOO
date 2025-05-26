@@ -41,23 +41,36 @@
                     <div class="card shadow p-4">
                         <h4 class="card-title">Fila Atual</h4>
                         {% if fila_espera %}
-                        <ul class="list-group">
-                            {% for paciente in fila_espera %}
-                            <li class="list-group-item">
-                                {{ paciente.senha }} - {{ paciente.setor }}
-                                {% if paciente.preferencial %}
-                                <span class="badge bg-warning text-dark">Preferencial</span>
-                                {% endif %}
-                            </li>
-                            {% endfor %}
-                        </ul>
+                            <!-- Senhas Preferenciais -->
+                            <div class="mb-3">
+                                <ul class="list-group">
+                                    {% for paciente in fila_espera if paciente.preferencial %}
+                                        <li class="list-group-item bg-warning bg-opacity-10">
+                                            {{ paciente.senha }} - {{ paciente.setor }}
+                                            <span class="badge bg-warning text-dark">Preferencial</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <!-- Senhas Normais -->
+                            <div>
+                                <ul class="list-group">
+                                    {% for paciente in fila_espera if not paciente.preferencial %}
+                                        <li class="list-group-item">
+                                            {{ paciente.senha }} - {{ paciente.setor }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         {% else %}
-                        <p class="text-muted">Nenhum paciente na fila.</p>
+                            <p class="text-muted">Nenhum paciente na fila.</p>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

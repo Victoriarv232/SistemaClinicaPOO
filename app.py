@@ -75,6 +75,7 @@ def index():
 
 @app.route('/painel')
 def painel():
+    # Função para chamar próximo paciente 
     def proximo_paciente():
         preferencial = Paciente.query.filter_by(preferencial=True).first()
         if preferencial:
@@ -90,10 +91,14 @@ def painel():
 
     guiche1 = proximo_paciente()
     guiche2 = proximo_paciente()
-    fila_espera = Paciente.query.all()
+    
+    # FILA ORDENADA: Preferenciais primeiro, depois normais por ordem de chegada (id crescente)
+    fila_espera = Paciente.query.order_by(
+        Paciente.preferencial.desc(),  # Preferenciais primeiro (True > False)
+        Paciente.id.asc()              # Ordem de chegada (id crescente)
+    ).all()
 
     return render_template('painel.html', guiche1=guiche1, guiche2=guiche2, fila_espera=fila_espera)
-
 
 @app.route('/resetar')
 def resetar():
