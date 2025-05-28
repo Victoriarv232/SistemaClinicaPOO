@@ -6,7 +6,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///senhas.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# MODELO DO BANCO
+# BANCO DE DADOS
 
 
 class Paciente(db.Model):
@@ -75,7 +75,6 @@ def index():
 
 @app.route('/painel')
 def painel():
-    # Função para chamar próximo paciente 
     def proximo_paciente():
         preferencial = Paciente.query.filter_by(preferencial=True).first()
         if preferencial:
@@ -92,7 +91,7 @@ def painel():
     guiche1 = proximo_paciente()
     guiche2 = proximo_paciente()
     
-    # FILA ORDENADA: Preferenciais primeiro, depois normais por ordem de chegada (id crescente)
+
     fila_espera = Paciente.query.order_by(
         Paciente.preferencial.desc(),  # Preferenciais primeiro (True > False)
         Paciente.id.asc()              # Ordem de chegada (id crescente)
@@ -112,12 +111,9 @@ def resetar():
 
     return redirect(url_for('index'))
 
-
-
-# CRIAR BANCO DE DADOS AO INICIAR
-
 with app.app_context():
     db.create_all()
+
 
 
 if __name__ == '__main__':
