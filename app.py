@@ -1,8 +1,13 @@
+from abc import ABC, abstractmethod
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///senhas.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://user:senha123!@localhost/senhas_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -20,8 +25,16 @@ class Paciente(db.Model):
 
 # CONSULTÓRIOS E GERADORES
 
+class GeradorSenha(ABC):
+    @abstractmethod
+    def gerar_senha(self, preferencial=False):
+        pass
 
-class GeradorSenhaUnico:
+    @abstractmethod
+    def resetar(self):
+        pass
+
+class GeradorSenhaUnico(GeradorSenha):
     def __init__(self, sigla, limite):
         self.sigla = sigla
         self.limite = limite
