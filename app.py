@@ -13,8 +13,17 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/senhas_db'
+
+# pra definir as variaveis de conexão com o banco de dados, de forma mais intuitiva hehe
+db_host = 'localhost'
+db_user = 'host'
+db_password = '123'
+db_name = 'senhas_db'
+
+# SQLALCHEMY_DATABASE_URI a partir das variáveis, ce muda la em cima e muda aqui em baixo automaticamente
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 try:
