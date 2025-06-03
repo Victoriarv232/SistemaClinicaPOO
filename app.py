@@ -6,7 +6,6 @@ import logging
 
 pymysql.install_as_MySQLdb()
 
-
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s'
@@ -26,8 +25,6 @@ except Exception as e:
     logger.critical(f"Falha crítica ao conectar ou criar tabelas no banco de dados: {e}")
 
 # BANCO DE DADOS
-
-
 class Paciente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     setor = db.Column(db.String(50), nullable=False)
@@ -38,7 +35,6 @@ class Paciente(db.Model):
         return f"{self.senha} ({'Preferencial' if self.preferencial else 'Normal'}) - {self.setor}"
 
 # CONSULTÓRIOS E GERADORES
-
 class GeradorSenha(ABC):
     @abstractmethod
     def gerar_senha(self, preferencial=False):
@@ -47,7 +43,6 @@ class GeradorSenha(ABC):
     @abstractmethod
     def resetar(self):
         pass
-
 class GeradorSenhaUnico(GeradorSenha):
     def __init__(self, sigla, limite):
         self.sigla = sigla
@@ -69,7 +64,6 @@ class GeradorSenhaUnico(GeradorSenha):
     def resetar(self):
         self.contador = 1
 
-
 consultorios = {
     'CG - Clínica Geral': {'sigla': 'CG', 'limite': 60},
     'GIN - Ginecologia': {'sigla': 'GIN', 'limite': 40},
@@ -82,7 +76,6 @@ geradores = {nome: GeradorSenhaUnico(
 
 # ROTAS
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     mensagem = None
@@ -92,12 +85,12 @@ def index():
 
         total_senhas = Paciente.query.filter_by(setor=setor).count()
         if total_senhas >= consultorios[setor]['limite']:
-            mensagem = f"⚠️ Limite de senhas atingido para {setor}."
+            mensagem = f" Limite de senhas atingido para {setor}."
             logger.warning(mensagem)
         else:
             senha = geradores[setor].gerar_senha(preferencial)
             if senha is None:
-                mensagem = f"⚠️Não foi possível gerar nova senha para {setor}"
+                mensagem = f" Não foi possível gerar nova senha para {setor}"
                 logger.error(mensagem)
             else:
                 novo_paciente = Paciente(
